@@ -16,6 +16,10 @@ const urlSchema = mongoose.Schema({
         userAgent:{type:String},
         referrer :{type:String},
     }],
+    createdBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    }
     },
     {
         timestamp:true,

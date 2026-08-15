@@ -1,9 +1,12 @@
 const express = require('express');
 const URL = require("./models/url")
 const urlRoute = require('./routes/url')
+const userRoute = require('./routes/user')
 const app =express();
 const PORT = 8000;
 const {connectToMongoDb} = require('./connect')
+const cookieParser = require('cookie-parser')
+const {fetchAndStoreTheUser} = require('./middleware/auth')
 
 connectToMongoDb("mongodb://127.0.0.1:27017/short-url").then(()=>{
     console.log("Connected to MongoDb");
@@ -11,7 +14,9 @@ connectToMongoDb("mongodb://127.0.0.1:27017/short-url").then(()=>{
 
 app.listen(PORT,()=>{console.log("Server Started")})
 app.use(express.json())
-app.use("/url",urlRoute);
+app.use(cookieParser())
+app.use("/url",fetchAndStoreTheUser,urlRoute);
+app.use("/user",userRoute);
 
 
 app.get("/:shortId", async (req,res)=>{

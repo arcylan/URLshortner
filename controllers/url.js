@@ -1,16 +1,18 @@
 const {nanoid} = require('nanoid')
 const URL = require('../models/url')
 async function genreateNewShortUrl(req,res){
-    console.log(req.body.url);
+    //console.log(req.body.url);
     const body = req.body;
     if(!body.url){
         return res.status(400).json({error:" url is required"})
     }
     const shortId = nanoid(8);
+    console.log(req.user._id)
     await URL.create({
         shortId : shortId,
         redirectURL : body.url,
         visitHistory: [],
+        createdBy : req.user._id,
     
     });
 
@@ -19,7 +21,7 @@ async function genreateNewShortUrl(req,res){
 
 async function analyticsViewer(req,res){
 
-    console.log("anaylitcs method is calling")
+    //console.log("anaylitcs method is calling")
     const shortId = req.params.shortId;
     const result = await URL.findOne({shortId});
 
